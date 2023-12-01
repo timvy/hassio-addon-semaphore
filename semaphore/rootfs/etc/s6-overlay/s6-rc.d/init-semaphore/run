@@ -1,0 +1,32 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: Semaphore
+# Semaphore init script, runs before any other service
+# ==============================================================================
+
+bashio::log.info "Configuring Semaphore..."
+
+# Ensure configuration data directory exists
+if ! bashio::fs.directory_exists '/config/semaphore/data'; then
+    mkdir -p /config/semaphore/data || bashio::exit.nok "Failed to create semaphore configuration directory"
+fi
+
+bashio::var.json \
+    public_url "$(bashio::config 'public_url')" \
+    port "^$(bashio::addon.port 80)" \
+    db_type "$(bashio::config 'db_type')" \
+    db_name "$(bashio::config 'db_name')" \
+    db_host "$(bashio::config 'db_host')" \
+    db_port "^$(bashio::config 'db_port')" \
+    db_user "$(bashio::config 'db_user')" \
+    db_password "$(bashio::config 'db_password')" \
+    log_level "$(bashio::string.lower "$(bashio::config 'log_level')")" \
+    | tempio \
+        -template /etc/semaphore/config.gtpl \
+        -out /config/semaphore/config.json
+
+if [ "$(bashio::config 'log_level')" == "debug" ]; then
+  bashio::log.info "$(cat /config/semaphore/config.json)"
+fi
+

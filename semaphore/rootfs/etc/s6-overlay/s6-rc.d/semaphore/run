@@ -1,0 +1,10 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: NSemaphore8N
+# Runs Semaphore script
+# ==============================================================================
+
+bashio::log.info "Starting Semaphore..."
+
+exec /semaphore service --config=/config/semaphore/config.json
