@@ -4,8 +4,7 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.2.2
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
-ARG SEMAPHORE_VERSION=2.8.75
-
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
     sshpass \
     git \
@@ -14,10 +13,10 @@ RUN apk add --no-cache \
     mysql-client \
     openssh-client-default \
     tini \
-    py3-aiohttp
-
-RUN wget https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz && \
+    py3-aiohttp \
+    wget --progress=dot:giga https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz && \
     tar xf semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz
+
 # Copy root filesystem
 COPY rootfs /
 
