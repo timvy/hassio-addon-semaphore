@@ -7,4 +7,4 @@
 
 bashio::log.info "Starting Semaphore..."
 
-exec /semaphore service --config=/config/semaphore/config.json
+exec semaphore service --config=/config/semaphore/config.json
