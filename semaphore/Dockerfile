@@ -7,6 +7,9 @@ ARG BUILD_ARCH
 
 ARG SEMAPHORE_VERSION=2.9.37
 
+# Set shell
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
