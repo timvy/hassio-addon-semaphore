@@ -1,4 +1,5 @@
 {
+  "tmp_path": "/config/data/tmp",
   "bolt": {
     "host": "/config/data/semaphore.bolt",
   },
@@ -16,7 +17,5 @@
   },
   "dialect": "{{ .db_type }}",
   "port": "{{ .port }}",
-  "tmp_path": "/config/data/tmp",
-  "access_key_encryption": "&#@89879n3@&*N&w343@#@*^$",
-  "web_host": "{{ .public_url }}",
+  "web_host": "{{ .public_url }}"
 }
