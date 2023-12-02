@@ -23,7 +23,7 @@ RUN apk add --no-cache \
     && curl -J -L -o /usr/local/bin/semaphore.tar.gz \
         "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz" \
     \
-    && tar xf /usr/local/bin/semaphore.tar.gz \
+    && tar -xf /usr/local/bin/semaphore.tar.gz \
     && rm /usr/local/bin/semaphore.tar.gz
 # Copy root filesystem
 COPY rootfs /
