@@ -33,3 +33,5 @@ if [ "$(bashio::config 'log_level')" == "debug" ]; then
   bashio::log.info "$(cat /config/config.json)"
 fi
 
+# Create default user
+semaphore --config=/config/config.json user add --admin --login admin --name Admin --email admin@example.com --password admin || true

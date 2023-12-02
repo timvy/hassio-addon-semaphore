@@ -22,8 +22,7 @@ RUN apt-get update \
     && curl -J -L -o /tmp/semaphore.deb \
         "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
     \
-    && dpkg --install /tmp/semaphore.deb \
-    && semaphore user add --admin --login admin --name Admin --email admin@example.com --password admin
+    && dpkg --install /tmp/semaphore.deb
 # Copy root filesystem
 COPY rootfs /
 
