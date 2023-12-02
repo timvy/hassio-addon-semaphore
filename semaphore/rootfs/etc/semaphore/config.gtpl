@@ -1,4 +1,5 @@
 {
+  "port": "3000",
   "tmp_path": "/config/data/tmp",
   "bolt": {
     "host": "/config/data/semaphore.bolt"
@@ -16,6 +17,5 @@
     "pass": "{{ .db_password }}"
   },
   "dialect": "{{ .db_type }}",
-  "port": "{{ .port }}",
   "web_host": "{{ .public_url }}"
 }
