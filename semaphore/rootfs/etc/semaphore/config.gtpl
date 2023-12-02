@@ -1,7 +1,7 @@
 {
   "tmp_path": "/config/data/tmp",
   "bolt": {
-    "host": "/config/data/semaphore.bolt",
+    "host": "/config/data/semaphore.bolt"
   },
   "mysql": {
     "name": "{{ .db_name }}",
