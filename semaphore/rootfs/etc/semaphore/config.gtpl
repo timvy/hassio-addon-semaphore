@@ -1,6 +1,6 @@
 {
   "bolt": {
-    "host": "/config/semaphore/data/semaphore.bolt",
+    "host": "/config/data/semaphore.bolt",
   },
   "mysql": {
     "name": "{{ .db_name }}",
@@ -16,7 +16,7 @@
   },
   "dialect": "{{ .db_type }}",
   "port": "{{ .port }}",
-  "tmp_path": "/config/semaphore/data/tmp",
+  "tmp_path": "/config/data/tmp",
   "access_key_encryption": "&#@89879n3@&*N&w343@#@*^$",
   "web_host": "{{ .public_url }}",
 }
