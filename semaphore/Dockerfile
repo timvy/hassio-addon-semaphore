@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     sshpass \
     git \
     curl \
+    tar \
     ansible \
     mysql-client \
     openssh-client-default \
@@ -20,10 +21,10 @@ RUN apk add --no-cache \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     \
-    && curl -J -L -o /usr/local/bin/semaphore.tar.gz \
+    && curl -L -o /usr/local/bin/semaphore.tar.gz \
         "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz" \
     \
-    && tar -xf /usr/local/bin/semaphore.tar.gz \
+    && tar -xzvf /usr/local/bin/semaphore.tar.gz \
     && rm /usr/local/bin/semaphore.tar.gz
 # Copy root filesystem
 COPY rootfs /
