@@ -33,6 +33,8 @@ if [ "$(bashio::config 'log_level')" == "debug" ]; then
   bashio::log.info "$(cat /config/config.json)"
 fi
 
+
+# Create default user
 users=$(semaphore --config=/config/config.json user list | grep -E '^[a-zA-Z0-9_-]+$')
 
 # Check if the output is empty
@@ -45,4 +47,3 @@ else
     echo "$users"
 fi
 
-# Create default user
