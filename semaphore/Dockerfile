@@ -1,5 +1,5 @@
 
-ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.2.2
+ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base/amd64:7.2.0
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
@@ -7,25 +7,30 @@ ARG BUILD_ARCH
 ARG SEMAPHORE_VERSION
 
 # hadolint ignore=DL3018
-RUN apk add --no-cache \
-    sshpass \
-    git \
-    curl \
-    tar \
-    ansible \
-    mysql-client \
-    openssh-client-default \
-    tini \
-    py3-aiohttp \
-    \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        sshpass \
+        git \
+        curl \
+        tar \
+        ansible \
+        mysql-client \
+        openssh-client-default \
+        tini \
+        py3-aiohttp \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     \
-    && curl -L -o /semaphore.tar.gz \
-        "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz" \
+    && curl -J -L -o /tmp/semaphore.deb \
+        "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
     \
-    && tar -xzvf /semaphore.tar.gz \
-    && rm /semaphore.tar.gz
+    && dpkg --install /tmp/influxdb.deb \
+    && rm -fr \
+        /tmp/* \
+        /etc/nginx \
+        /var/{cache,log}/* \
+        /var/lib/apt/lists/* \
+    \
 # Copy root filesystem
 COPY rootfs /
 
