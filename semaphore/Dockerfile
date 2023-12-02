@@ -20,11 +20,11 @@ RUN apk add --no-cache \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     \
-    && curl -J -L -o /usr/local/bin/semaphore \
+    && curl -J -L -o /usr/local/bin \
         "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz" \
     \
-    && tar xf semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz
-
+    && tar xf /usr/local/bin/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz \
+    && rm /usr/local/bin/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz
 # Copy root filesystem
 COPY rootfs /
 
