@@ -7,4 +7,4 @@ codenotary:
   base_image: codenotary@frenck.dev
   signer: codenotary@frenck.dev
 args:
-  SEMAPHORE_VERSION: "2.8.75"
+  SEMAPHORE_VERSION: "2.9.37"

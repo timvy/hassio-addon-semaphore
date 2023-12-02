@@ -15,7 +15,7 @@ RUN apk add --no-cache \
     openssh-client-default \
     tini \
     py3-aiohttp && \
-    wget --progress=dot:giga https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz && \
+    wget https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz && \
     tar xf semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz
 
 # Copy root filesystem
