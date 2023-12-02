@@ -28,10 +28,6 @@ RUN apk add --no-cache \
 # Copy root filesystem
 COPY rootfs /
 
-RUN
-    wget -q  && \
-
-
 # Build arguments
 ARG BUILD_DATE
 ARG BUILD_DESCRIPTION
