@@ -10,7 +10,7 @@ arch:
   - aarch64
   - amd64
 ports:
-  80/tcp: 5679
+  80/tcp: 3112
 ports_description:
   80/tcp: Web Interface
 hassio_api: true
