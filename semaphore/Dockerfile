@@ -4,7 +4,8 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base/amd64:7.2.0
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 ARG BUILD_ARCH
-ARG SEMAPHORE_VERSION
+
+ARG SEMAPHORE_VERSION=2.9.37
 
 # hadolint ignore=DL3008
 RUN apt-get update \
