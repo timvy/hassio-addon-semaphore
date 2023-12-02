@@ -17,7 +17,7 @@ RUN apk add --no-cache \
     tini \
     py3-aiohttp \
     \
-    ARCH="${BUILD_ARCH}" \
+    && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     \
     && curl -J -L -o /user/local/bin/semaphore \
