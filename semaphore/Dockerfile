@@ -15,17 +15,22 @@ RUN apk add --no-cache \
     mysql-client \
     openssh-client-default \
     tini \
-    py3-aiohttp
+    py3-aiohttp \
+    \
+    ARCH="${BUILD_ARCH}" \
+    && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
+    \
+    && curl -J -L -o /user/local/bin/semaphore \
+        "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz" \
+    \
+    && tar xf semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz
 
 # Copy root filesystem
 COPY rootfs /
 
-RUN \
-    ARCH="${BUILD_ARCH}" \
-    && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
-    \
-    wget -q https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz && \
-    tar xf semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz
+RUN
+    wget -q  && \
+
 
 # Build arguments
 ARG BUILD_DATE
