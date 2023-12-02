@@ -23,7 +23,17 @@ RUN apt-get update \
     && curl -J -L -o /tmp/semaphore.deb \
         "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
     \
-    && dpkg --install /tmp/semaphore.deb
+    && dpkg --install /tmp/semaphore.deb \
+    \
+    && rm -fr \
+        /tmp/* \
+        /etc/nginx \
+        /var/{cache,log}/* \
+        /var/lib/apt/lists/* \
+    \
+    && mkdir -p /var/log/nginx \
+    && touch /var/log/nginx/error.log
+
 # Copy root filesystem
 COPY rootfs /
 

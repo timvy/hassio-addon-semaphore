@@ -1,5 +1,5 @@
 {
-  "port": "3000",
+  "port": "43002",
   "tmp_path": "/config/data/tmp",
   "bolt": {
     "host": "/config/data/semaphore.bolt"
