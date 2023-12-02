@@ -3,6 +3,7 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/base:14.2.2
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
+ARG BUILD_ARCH
 ARG SEMAPHORE_VERSION
 
 # hadolint ignore=DL3018
@@ -19,11 +20,14 @@ RUN apk add --no-cache \
 # Copy root filesystem
 COPY rootfs /
 
-RUN wget -q https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz && \
+RUN \
+    ARCH="${BUILD_ARCH}" \
+    && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
+    \
+    wget -q https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.tar.gz && \
     tar xf semaphore_${SEMAPHORE_VERSION}_linux_arm64.tar.gz
 
 # Build arguments
-ARG BUILD_ARCH
 ARG BUILD_DATE
 ARG BUILD_DESCRIPTION
 ARG BUILD_NAME
