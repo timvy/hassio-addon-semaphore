@@ -15,6 +15,12 @@ ports_description:
   3112/tcp: Web Interface
 hassio_api: true
 host_network: true
+privileged:
+  - CAP_FOWNER
+  - CAP_CHOWN
+  - CAP_MKNOD
+  - CAP_SYS_CHROOT
+  - CAP_SYS_ADMIN
 map:
   - addon_config:rw
   - ssl
