@@ -9,24 +9,24 @@ bashio::log.info "Configuring Semaphore..."
 
 # Ensure configuration data directory exists
 if ! bashio::fs.directory_exists '/config/data'; then
-    mkdir -p /config/data || bashio::exit.nok "Failed to create semaphore configuration directory"
+  mkdir -p /config/data || bashio::exit.nok "Failed to create semaphore configuration directory"
 fi
 
-if ! bashio::fs.directory_exists '/config/data/tmp'; then
-    mkdir -p /config/data/tmp || bashio::exit.nok "Failed to create semaphore tmp directory"
+if ! bashio::fs.directory_exists '/data/tmp'; then
+  mkdir -p /data/tmp || bashio::exit.nok "Failed to create semaphore tmp directory"
 fi
 
 bashio::var.json \
-    public_url "$(bashio::config 'public_url')" \
-    db_type "$(bashio::config 'db_type')" \
-    db_name "$(bashio::config 'db_name')" \
-    db_host "$(bashio::config 'db_host')" \
-    db_port "^$(bashio::config 'db_port')" \
-    db_user "$(bashio::config 'db_user')" \
-    db_password "$(bashio::config 'db_password')" \
-    | tempio \
-        -template /etc/semaphore/config.gtpl \
-        -out /config/config.json
+  public_url "$(bashio::config 'public_url')" \
+  db_type "$(bashio::config 'db_type')" \
+  db_name "$(bashio::config 'db_name')" \
+  db_host "$(bashio::config 'db_host')" \
+  db_port "^$(bashio::config 'db_port')" \
+  db_user "$(bashio::config 'db_user')" \
+  db_password "$(bashio::config 'db_password')" \
+  | tempio \
+      -template /etc/semaphore/config.gtpl \
+      -out /config/config.json
 
 if [ "$(bashio::config 'log_level')" == "debug" ]; then
   bashio::log.info "$(cat /config/config.json)"
@@ -37,11 +37,11 @@ users=$(semaphore --config=/config/config.json user list | grep -E '^[a-zA-Z0-9_
 
 # Check if the output is empty
 if [ -z "$users" ]; then
-    echo "No users found. Creating a new user..."
+  echo "No users found. Creating a new user..."
 
-    semaphore --config=/config/config.json user add --admin --login admin --name Admin --email admin@example.com --password admin
+  semaphore --config=/config/config.json user add --admin --login admin --name Admin --email admin@example.com --password admin
 else
-    echo "Existing users:"
-    echo "$users"
+  echo "Existing users:"
+  echo "$users"
 fi
 
