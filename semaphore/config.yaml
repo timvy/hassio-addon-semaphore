@@ -10,9 +10,9 @@ arch:
   - aarch64
   - amd64
 ports:
-  80/tcp: 3112
+  3112/tcp: 3112
 ports_description:
-  80/tcp: Web Interface
+  3112/tcp: Web Interface
 hassio_api: true
 host_network: true
 map:

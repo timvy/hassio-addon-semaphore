@@ -7,9 +7,9 @@
 declare port
 
 # Generate direct access configuration, if enabled.
-port=$(bashio::addon.port 80)
+port=$(bashio::addon.port 3112)
 if ! bashio::var.has_value "${port}"; then
-  port=80
+  port=3112
 fi
 
 if bashio::var.has_value "${port}"; then
