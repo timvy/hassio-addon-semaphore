@@ -26,7 +26,6 @@ options:
   db_type: bolt
   public_url: ""
 schema:
-  log_level: list(info|warn|error|verbose|debug)
   ssl: bool
   certfile: str
   keyfile: str
@@ -37,3 +36,4 @@ schema:
   db_port: port?
   db_user: str?
   db_password: str?
+  log_level: list(trace|debug|info|notice|warning|error|fatal)?
