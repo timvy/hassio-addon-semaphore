@@ -19,9 +19,7 @@ Since [Semaphore][semaphore] can be self-hosted, this addon aims to create a sem
 
 ## Features
 
-- Semaphore self host
-- Ingress access
-- Direct connection with home assistant authentication
+- Semaphore
 - SSL support
 
 ## Support

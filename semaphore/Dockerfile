@@ -22,12 +22,10 @@ RUN apt-get update \
         nginx \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
-    \
     && curl -J -L -o /tmp/semaphore.deb \
         "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
     \
     && dpkg --install /tmp/semaphore.deb \
-    \
     && rm -fr \
         /tmp/* \
         /etc/nginx \
