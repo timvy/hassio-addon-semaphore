@@ -17,7 +17,7 @@ if ! bashio::fs.directory_exists '/data/tmp'; then
 fi
 
 bashio::var.json \
-  public_url "$public_url" \
+  public_url "$(bashio::config 'public_url')" \
   db_type "$(bashio::config 'db_type')" \
   db_name "$(bashio::config 'db_name')" \
   db_host "$(bashio::config 'db_host')" \
@@ -31,4 +31,3 @@ bashio::var.json \
 if [ "$(bashio::config 'log_level')" == "debug" ]; then
   bashio::log.info "$(cat /data/config.json)"
 fi
-
