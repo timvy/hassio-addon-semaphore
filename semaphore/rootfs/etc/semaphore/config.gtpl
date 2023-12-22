@@ -1,6 +1,6 @@
 {
   "port": "43002",
-  "tmp_path": "/config/data/tmp",
+  "tmp_path": "/data/tmp",
   "bolt": {
     "host": "/config/data/semaphore.bolt"
   },
