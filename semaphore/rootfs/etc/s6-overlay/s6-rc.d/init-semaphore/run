@@ -32,16 +32,3 @@ if [ "$(bashio::config 'log_level')" == "debug" ]; then
   bashio::log.info "$(cat /data/config.json)"
 fi
 
-# Create default user
-users=$(semaphore --config=/data/config.json user list | grep -E '^[a-zA-Z0-9_-]+$')
-
-# Check if the output is empty
-if [ -z "$users" ]; then
-  echo "No users found. Creating a new user..."
-
-  semaphore --config=/data/config.json user add --admin --login admin --name Admin --email admin@example.com --password admin
-else
-  echo "Existing users:"
-  echo "$users"
-fi
-
