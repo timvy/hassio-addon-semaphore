@@ -16,11 +16,6 @@ if ! bashio::fs.directory_exists '/data/tmp'; then
   mkdir -p /data/tmp || bashio::exit.nok "Failed to create semaphore tmp directory"
 fi
 
-public_url="$(bashio::config 'public_url')"
-if ! bashio::var.has_value "${public_url}"; then
-  public_url=''
-fi
-
 bashio::var.json \
   public_url "$public_url" \
   db_type "$(bashio::config 'db_type')" \
@@ -35,5 +30,18 @@ bashio::var.json \
 
 if [ "$(bashio::config 'log_level')" == "debug" ]; then
   bashio::log.info "$(cat /data/config.json)"
+fi
+
+# Create default user
+users=$(semaphore --config=/data/config.json user list | grep -E '^[a-zA-Z0-9_-]+$')
+
+# Check if the output is empty
+if [ -z "$users" ]; then
+  echo "No users found. Creating a new user..."
+
+  semaphore --config=/data/config.json user add --admin --login admin --name Admin --email admin@example.com --password admin
+else
+  echo "Existing users:"
+  echo "$users"
 fi
 
