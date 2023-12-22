@@ -31,3 +31,4 @@ bashio::var.json \
 if [ "$(bashio::config 'log_level')" == "debug" ]; then
   bashio::log.info "$(cat /data/config.json)"
 fi
+
