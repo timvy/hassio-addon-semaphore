@@ -16,8 +16,13 @@ if ! bashio::fs.directory_exists '/data/tmp'; then
   mkdir -p /data/tmp || bashio::exit.nok "Failed to create semaphore tmp directory"
 fi
 
+public_url="$(bashio::config 'public_url')"
+if ! bashio::var.has_value "${public_url}"; then
+  public_url=''
+fi
+
 bashio::var.json \
-  public_url "$(bashio::config 'public_url')" \
+  public_url "$public_url" \
   db_type "$(bashio::config 'db_type')" \
   db_name "$(bashio::config 'db_name')" \
   db_host "$(bashio::config 'db_host')" \
