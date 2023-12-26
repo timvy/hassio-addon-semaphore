@@ -13,7 +13,7 @@ bashio::log.info "Configuring Semaphore Default User ..."
 users=$(semaphore --config=/data/config.json user list | grep -E '^[a-zA-Z0-9_-]+$')
 
 # Check if the output is empty
-if [[ -z "$users" ]]; then
+if [[ -z $users ]]; then
   bashio::log.info "No users found. Creating a new user..."
 
   semaphore --config=/data/config.json user add --admin --login admin --name Admin --email admin@example.com --password admin
