@@ -8,6 +8,7 @@
 bashio::net.wait_for 43002
 
 bashio::log.info "Configuring Semaphore Default User ..."
+declare users
 
 # Create default user
 users=$(semaphore --config=/data/config.json user list | grep -E '^[a-zA-Z0-9_-]+$')
