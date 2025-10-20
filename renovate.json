@@ -8,7 +8,7 @@
          "reviewers": ["timvy"],
          "platformAutomerge": true,
          "automerge": false,
-         "major": {"automerge": false},
+         "major": {"automerge": true},
          "minor": {"automerge": true},
          "patch": {"automerge": true},
          "customManagers": [
@@ -23,11 +23,9 @@
            },
            {
              "customType": "regex",
-             "description": "Update Debian base image in Dockerfile",
+             "description": "Update BASE_VERSION in Dockerfile",
              "managerFilePatterns": ["/(^|/)Dockerfile$/"],
-             "matchStrings": [
-               "ARG BUILD_FROM=ghcr\\.io\\/hassio-addons\\/debian-base:(?<currentValue>[^\\s\\n]+)"
-             ],
+             "matchStrings": ["ARG BASE_VERSION=(?<currentValue>[^\\s\\n]+)"],
              "datasourceTemplate": "github-releases",
              "depNameTemplate": "hassio-addons/addon-debian-base",
              "extractVersionTemplate": "^v(?<version>.*)$"
@@ -40,7 +38,7 @@
              "matchDepNames": ["semaphoreui/semaphore"],
              "groupName": "Semaphore",
              "automerge": true,
-             "minimumReleaseAge": "3 days"
+            //  "minimumReleaseAge": "3 days"
            },
            {
              "description": "Group Debian base updates",
@@ -48,14 +46,8 @@
              "matchDepNames": ["hassio-addons/addon-debian-base"],
              "groupName": "Debian Base",
              "automerge": true,
-             "minimumReleaseAge": "7 days"
+            //  "minimumReleaseAge": "7 days"
            },
-           {
-             "description": "Disable major version updates for base images",
-             "matchManagers": ["custom.regex"],
-             "matchDepNames": ["hassio-addons/addon-debian-base"],
-             "major": {"enabled": false}
-           }
          ],
          "prBodyTemplate": "This PR updates {{depName}} from {{currentVersion}} to {{newVersion}}.\n\n{{#if hasReleaseNotes}}## Release Notes\n{{{releaseNotes}}}{{/if}}\n\n---\n📅 **Schedule**: {{schedule}}\n🚦 **Automerge**: {{automerge}}\n♻ **Rebasing**: {{rebaseWhen}}\n🔕 **Ignore**: Close this PR and you won't be reminded about this update again.\n\n*This update was automatically created by Renovate Bot*",
          "prConcurrentLimit": 2,
