@@ -1,11 +1,9 @@
 
-ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base/amd64:7.2.0
+ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:stable
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 ARG BUILD_ARCH
-
-ARG SEMAPHORE_VERSION=2.9.37
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -18,12 +16,14 @@ RUN apt-get update \
         sshpass \
         git \
         curl \
+        jq \
         ansible \
         nginx \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
+    && SEMAPHORE_VERSION=$(curl -s https://api.github.com/repos/semaphoreui/semaphore/releases/latest | jq -r .tag_name | sed 's/^v//') \
     && curl -J -L -o /tmp/semaphore.deb \
-        "https://github.com/ansible-semaphore/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
+        "https://github.com/semaphoreui/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
     && dpkg --install /tmp/semaphore.deb \
     && rm -fr \
         /tmp/* \
