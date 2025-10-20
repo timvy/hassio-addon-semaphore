@@ -1,8 +1,8 @@
 {
   "port": "43002",
   "tmp_path": "/data/tmp",
-  "bolt": {
-    "host": "/config/data/semaphore.bolt"
+  "sqlite": {
+    "host": "/config/data/semaphore.sqlite"
   },
   "mysql": {
     "name": "{{ .db_name }}",
