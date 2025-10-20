@@ -1,6 +1,10 @@
 
 ARG BASE_VERSION=8.1.4
 ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:${BASE_VERSION}
+ARG OPENTOFU_VERSION=1.9.1
+
+# OpenTofu stage
+FROM ghcr.io/opentofu/opentofu:${OPENTOFU_VERSION}-minimal AS tofu
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
@@ -35,6 +39,9 @@ RUN apt-get update \
 
 # Copy root filesystem
 COPY rootfs /
+
+# Copy the tofu binary from the minimal image
+COPY --from=tofu /usr/local/bin/tofu /usr/local/bin/tofu
 
 EXPOSE 3112
 
