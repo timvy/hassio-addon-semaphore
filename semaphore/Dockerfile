@@ -15,8 +15,6 @@ RUN apt-get update \
         python3-pip \
         sshpass \
         git \
-        curl \
-        jq \
         ansible \
         nginx \
     && ARCH="${BUILD_ARCH}" \
