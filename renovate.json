@@ -1,10 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":dependencyDashboard",
-    ":semanticCommits"
-  ],
+  "extends": ["config:recommended", ":dependencyDashboard", ":semanticCommits"],
   "timezone": "UTC",
   "schedule": ["at any time"],
   "labels": ["dependencies", "renovate"],
@@ -32,7 +28,7 @@
       "extractVersionTemplate": "^v(?<version>.*)$"
     },
     {
-      "customType": "regex", 
+      "customType": "regex",
       "description": "Update Debian base image in Dockerfile",
       "fileMatch": ["(^|/)Dockerfile$"],
       "matchStrings": [
