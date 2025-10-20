@@ -1,0 +1,20 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: Semaphore
+# Configures Ansible Galaxy content
+# ==============================================================================
+
+# Install Ansible Galaxy collections, if enabled.
+if bashio::config.has_value 'ansible_collections'; then
+    for collection in $(bashio::config 'ansible_collections' | jq -r '.[]'); do
+        ansible-galaxy collection install "${collection}"
+    done
+fi
+
+# Install Ansible Galaxy roles, if enabled.
+if bashio::config.has_value 'ansible_roles'; then
+    for role in $(bashio::config 'ansible_roles' | jq -r '.[]'); do
+        ansible-galaxy role install "${role}"
+    done
+fi

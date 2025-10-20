@@ -1,0 +1,13 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: Semaphore
+# Configures Python packages
+# ==============================================================================
+
+# Install Python packages, if enabled.
+if bashio::config.has_value 'python_packages'; then
+    for package in $(bashio::config 'python_packages' | jq -r '.[]'); do
+        pip install "${package}"
+    done
+fi 

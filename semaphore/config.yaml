@@ -19,11 +19,14 @@ map:
   - addon_config:rw
   - ssl
 options:
-  ssl: false
+  ansible_collections: []
+  ansible_roles: []
   certfile: fullchain.pem
-  keyfile: privkey.pem
   db_type: sqlite
+  keyfile: privkey.pem
   public_url: ""
+  python_packages: []
+  ssl: false
 schema:
   ssl: bool
   certfile: str
@@ -36,3 +39,9 @@ schema:
   db_port: port?
   db_user: str?
   db_password: str?
+  ansible_collections:
+    - str
+  ansible_roles:
+    - str
+  python_packages:
+    - str
