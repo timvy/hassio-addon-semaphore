@@ -24,9 +24,7 @@
     {
       "description": "Update Semaphore version in Dockerfile",
       "fileMatch": ["(^|/)Dockerfile$"],
-      "matchStrings": [
-        "ARG SEMAPHORE_VERSION=(?<currentValue>[^\\s]+)"
-      ],
+      "matchStrings": ["ARG SEMAPHORE_VERSION=(?<currentValue>[^\\s]+)"],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "semaphoreui/semaphore",
       "extractVersionTemplate": "^v(?<version>.*)$"
@@ -52,7 +50,7 @@
     },
     {
       "description": "Group Debian base updates",
-      "matchDatasources": ["github-releases"], 
+      "matchDatasources": ["github-releases"],
       "matchDepNames": ["hassio-addons/addon-debian-base"],
       "groupName": "Debian Base",
       "automerge": true
