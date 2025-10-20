@@ -7,7 +7,7 @@
   "assignees": ["timvy"],
   "reviewers": ["timvy"],
   "platformAutomerge": true,
-  "automerge": false,
+  "automerge": true,
   "major": { "automerge": true },
   "minor": { "automerge": true },
   "patch": { "automerge": true },
@@ -24,11 +24,14 @@
     {
       "customType": "regex",
       "description": "Update BASE_VERSION in Dockerfile",
-      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
-      "matchStrings": ["ARG BASE_VERSION=(?<currentValue>[^\\s\\n]+)"],
+      "managerFilePatterns": [".*Dockerfile.*"],
+      "matchStrings": [
+        "ARG BASE_VERSION\\s*=\\s*['\"]?(?<currentValue>[0-9a-zA-Z._-]+)['\"]?"
+      ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "hassio-addons/addon-debian-base",
-      "extractVersionTemplate": "^v(?<version>.*)$"
+      "extractVersionTemplate": "^(v)?(?<version>.*)$",
+      "versioningTemplate": "semver"
     }
   ],
   "packageRules": [
