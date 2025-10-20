@@ -5,7 +5,7 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:stable
 FROM ${BUILD_FROM}
 ARG BUILD_ARCH
 
-ARG SEMAPHORE_VERSION=2.16.30
+ARG SEMAPHORE_VERSION=2.16.32
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
