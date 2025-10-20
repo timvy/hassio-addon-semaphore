@@ -1,55 +1,55 @@
 {
-         "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-         "extends": ["config:recommended", ":dependencyDashboard", ":semanticCommits"],
-         "timezone": "UTC",
-         "schedule": ["before 6am on monday"],
-         "labels": ["dependencies", "renovate"],
-         "assignees": ["timvy"],
-         "reviewers": ["timvy"],
-         "platformAutomerge": true,
-         "automerge": false,
-         "major": {"automerge": true},
-         "minor": {"automerge": true},
-         "patch": {"automerge": true},
-         "customManagers": [
-           {
-             "customType": "regex",
-             "description": "Update Semaphore version in Dockerfile",
-             "managerFilePatterns": ["/(^|/)Dockerfile$/"],
-             "matchStrings": ["ARG SEMAPHORE_VERSION=(?<currentValue>[^\\s\\n]+)"],
-             "datasourceTemplate": "github-releases",
-             "depNameTemplate": "semaphoreui/semaphore",
-             "extractVersionTemplate": "^v(?<version>.*)$"
-           },
-           {
-             "customType": "regex",
-             "description": "Update BASE_VERSION in Dockerfile",
-             "managerFilePatterns": ["/(^|/)Dockerfile$/"],
-             "matchStrings": ["ARG BASE_VERSION=(?<currentValue>[^\\s\\n]+)"],
-             "datasourceTemplate": "github-releases",
-             "depNameTemplate": "hassio-addons/addon-debian-base",
-             "extractVersionTemplate": "^v(?<version>.*)$"
-           }
-         ],
-         "packageRules": [
-           {
-             "description": "Group Semaphore updates",
-             "matchManagers": ["custom.regex"],
-             "matchDepNames": ["semaphoreui/semaphore"],
-             "groupName": "Semaphore",
-             "automerge": true,
-            //  "minimumReleaseAge": "3 days"
-           },
-           {
-             "description": "Group Debian base updates",
-             "matchManagers": ["custom.regex"],
-             "matchDepNames": ["hassio-addons/addon-debian-base"],
-             "groupName": "Debian Base",
-             "automerge": true,
-            //  "minimumReleaseAge": "7 days"
-           },
-         ],
-         "prBodyTemplate": "This PR updates {{depName}} from {{currentVersion}} to {{newVersion}}.\n\n{{#if hasReleaseNotes}}## Release Notes\n{{{releaseNotes}}}{{/if}}\n\n---\n📅 **Schedule**: {{schedule}}\n🚦 **Automerge**: {{automerge}}\n♻ **Rebasing**: {{rebaseWhen}}\n🔕 **Ignore**: Close this PR and you won't be reminded about this update again.\n\n*This update was automatically created by Renovate Bot*",
-         "prConcurrentLimit": 2,
-         "prHourlyLimit": 1
-       }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":dependencyDashboard", ":semanticCommits"],
+  "timezone": "UTC",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies", "renovate"],
+  "assignees": ["timvy"],
+  "reviewers": ["timvy"],
+  "platformAutomerge": true,
+  "automerge": false,
+  "major": { "automerge": true },
+  "minor": { "automerge": true },
+  "patch": { "automerge": true },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Semaphore version in Dockerfile",
+      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
+      "matchStrings": ["ARG SEMAPHORE_VERSION=(?<currentValue>[^\\s\\n]+)"],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "semaphoreui/semaphore",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Update BASE_VERSION in Dockerfile",
+      "managerFilePatterns": ["/(^|/)Dockerfile$/"],
+      "matchStrings": ["ARG BASE_VERSION=(?<currentValue>[^\\s\\n]+)"],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "hassio-addons/addon-debian-base",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group Semaphore updates",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["semaphoreui/semaphore"],
+      "groupName": "Semaphore",
+      "automerge": true
+      //  "minimumReleaseAge": "3 days"
+    },
+    {
+      "description": "Group Debian base updates",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["hassio-addons/addon-debian-base"],
+      "groupName": "Debian Base",
+      "automerge": true
+      //  "minimumReleaseAge": "7 days"
+    }
+  ],
+  "prBodyTemplate": "This PR updates {{depName}} from {{currentVersion}} to {{newVersion}}.\n\n{{#if hasReleaseNotes}}## Release Notes\n{{{releaseNotes}}}{{/if}}\n\n---\n📅 **Schedule**: {{schedule}}\n🚦 **Automerge**: {{automerge}}\n♻ **Rebasing**: {{rebaseWhen}}\n🔕 **Ignore**: Close this PR and you won't be reminded about this update again.\n\n*This update was automatically created by Renovate Bot*",
+  "prConcurrentLimit": 2,
+  "prHourlyLimit": 1
+}

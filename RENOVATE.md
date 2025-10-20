@@ -18,6 +18,7 @@ This repository uses Renovate Bot to automatically update dependencies. The conf
 ## Manual Trigger
 
 You can manually trigger Renovate by:
+
 1. Going to the Actions tab
 2. Selecting "Renovate" workflow
 3. Clicking "Run workflow"
