@@ -1,0 +1,76 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":automergeDigest",
+    ":automergeMinor"
+  ],
+  "timezone": "UTC",
+  "schedule": ["before 6am on monday"],
+  "labels": ["dependencies", "renovate"],
+  "assignees": ["timvy"],
+  "reviewers": ["timvy"],
+  "platformAutomerge": true,
+  "automerge": true,
+  "major": {
+    "automerge": false
+  },
+  "docker": {
+    "enabled": true
+  },
+  "regexManagers": [
+    {
+      "description": "Update Semaphore version in Dockerfile",
+      "fileMatch": ["(^|/)Dockerfile$"],
+      "matchStrings": [
+        "ARG SEMAPHORE_VERSION=(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "semaphoreui/semaphore",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "description": "Update Debian base image in Dockerfile",
+      "fileMatch": ["(^|/)Dockerfile$"],
+      "matchStrings": [
+        "ARG BUILD_FROM=ghcr\\.io\\/hassio-addons\\/debian-base:(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "hassio-addons/addon-debian-base",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group Semaphore updates",
+      "matchDatasources": ["github-releases"],
+      "matchDepNames": ["semaphoreui/semaphore"],
+      "groupName": "Semaphore",
+      "automerge": true
+    },
+    {
+      "description": "Group Debian base updates",
+      "matchDatasources": ["github-releases"], 
+      "matchDepNames": ["hassio-addons/addon-debian-base"],
+      "groupName": "Debian Base",
+      "automerge": true
+    },
+    {
+      "description": "Disable major version updates for base images",
+      "matchDatasources": ["github-releases"],
+      "matchDepNames": ["hassio-addons/addon-debian-base"],
+      "major": {
+        "enabled": false
+      }
+    }
+  ],
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageAction": "chore: update",
+  "commitMessageExtra": "to {{newVersion}}",
+  "prTitle": "{{commitMessageAction}} {{depName}} {{commitMessageExtra}}",
+  "prBodyTemplate": "This PR updates {{depName}} from {{currentVersion}} to {{newVersion}}.\n\n{{#if hasReleaseNotes}}## Release Notes\n{{{releaseNotes}}}{{/if}}\n\n{{#if schedule}}📅 **Schedule**: {{schedule}}{{/if}}\n🚦 **Automerge**: {{automerge}}\n♻ **Rebasing**: {{rebaseWhen}}\n🔕 **Ignore**: Close this PR and you won't be reminded about this update again.\n\n---\n*This update was automatically created by Renovate Bot*",
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2
+}

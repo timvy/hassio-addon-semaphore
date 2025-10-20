@@ -1,0 +1,137 @@
+---
+name: Update Dependencies
+
+"on":
+  schedule:
+    # Check for new releases daily at 6 AM UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}
+  # Allow manual triggering
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get latest Semaphore version
+        id: semaphore-version
+        run: |
+          LATEST_VERSION=$(curl -s \
+            https://api.github.com/repos/semaphoreui/semaphore/releases/latest \
+            | jq -r .tag_name | sed 's/^v//')
+          echo "latest=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+          # Get current version from Dockerfile
+          CURRENT_VERSION=$(grep "ARG SEMAPHORE_VERSION=" semaphore/Dockerfile \
+            | cut -d'=' -f2)
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          echo "Latest Semaphore version: $LATEST_VERSION"
+          echo "Current Semaphore version: $CURRENT_VERSION"
+
+      - name: Get latest Debian Base version
+        id: debian-version
+        run: |
+          LATEST_VERSION=$(curl -s \
+            https://api.github.com/repos/hassio-addons/addon-debian-base/releases/latest \
+            | jq -r .tag_name | sed 's/^v//')
+          echo "latest=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+          # Get current version from Dockerfile
+          CURRENT_VERSION=$(grep "ARG BUILD_FROM=" semaphore/Dockerfile \
+            | cut -d':' -f2)
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          echo "Latest Debian base version: $LATEST_VERSION"
+          echo "Current Debian base version: $CURRENT_VERSION"
+
+      - name: Update Dockerfile if new versions available
+        id: update-dockerfile
+        run: |
+          SEMAPHORE_UPDATED=false
+          DEBIAN_UPDATED=false
+          CHANGES=""
+
+          # Check and update Semaphore version
+          SEMAPHORE_LATEST="${{ steps.semaphore-version.outputs.latest }}"
+          SEMAPHORE_CURRENT="${{ steps.semaphore-version.outputs.current }}"
+          if [ "$SEMAPHORE_LATEST" != "$SEMAPHORE_CURRENT" ]; then
+            sed -i "s/ARG SEMAPHORE_VERSION=$SEMAPHORE_CURRENT/ARG SEMAPHORE_VERSION=$SEMAPHORE_LATEST/" \
+              semaphore/Dockerfile
+            SEMAPHORE_UPDATED=true
+            CHANGES="${CHANGES}- Updated Semaphore from $SEMAPHORE_CURRENT to $SEMAPHORE_LATEST\n"
+          fi
+
+          # Check and update Debian base version
+          DEBIAN_LATEST="${{ steps.debian-version.outputs.latest }}"
+          DEBIAN_CURRENT="${{ steps.debian-version.outputs.current }}"
+          if [ "$DEBIAN_LATEST" != "$DEBIAN_CURRENT" ]; then
+            sed -i "s/:$DEBIAN_CURRENT/:$DEBIAN_LATEST/" semaphore/Dockerfile
+            DEBIAN_UPDATED=true
+            CHANGES="${CHANGES}- Updated Debian base from $DEBIAN_CURRENT to $DEBIAN_LATEST\n"
+          fi
+
+          # Set outputs
+          if [ "$SEMAPHORE_UPDATED" = true ] || [ "$DEBIAN_UPDATED" = true ]; then
+            echo "updated=true" >> $GITHUB_OUTPUT
+            echo -e "changes=$CHANGES" >> $GITHUB_OUTPUT
+
+            # Create branch suffix based on what was updated
+            if [ "$SEMAPHORE_UPDATED" = true ] && [ "$DEBIAN_UPDATED" = true ]; then
+              echo "branch-suffix=semaphore-$SEMAPHORE_LATEST-debian-$DEBIAN_LATEST" \
+                >> $GITHUB_OUTPUT
+              echo "title=Update Semaphore to $SEMAPHORE_LATEST and Debian base to $DEBIAN_LATEST" \
+                >> $GITHUB_OUTPUT
+            elif [ "$SEMAPHORE_UPDATED" = true ]; then
+              echo "branch-suffix=semaphore-$SEMAPHORE_LATEST" >> $GITHUB_OUTPUT
+              echo "title=Update Semaphore to $SEMAPHORE_LATEST" >> $GITHUB_OUTPUT
+            else
+              echo "branch-suffix=debian-$DEBIAN_LATEST" >> $GITHUB_OUTPUT
+              echo "title=Update Debian base to $DEBIAN_LATEST" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "updated=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.update-dockerfile.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: ${{ steps.update-dockerfile.outputs.title }}"
+          title: "${{ steps.update-dockerfile.outputs.title }}"
+          body: |
+            This PR automatically updates dependencies with the following changes:
+
+            **Changes:**
+            ${{ steps.update-dockerfile.outputs.changes }}
+
+            **Release Notes:**
+            - Semaphore: https://github.com/semaphoreui/semaphore/releases
+            - Debian Base: https://github.com/hassio-addons/addon-debian-base/releases
+          branch: update-${{ steps.update-dockerfile.outputs.branch-suffix }}
+          delete-branch: true
+
+      - name: Auto-merge PR
+        if: steps.update-dockerfile.outputs.updated == 'true'
+        run: |
+          # Wait a moment for the PR to be created
+          sleep 10
+
+          # Get the PR number
+          PR_NUMBER=$(gh pr list --state open \
+            --head update-${{ steps.update-dockerfile.outputs.branch-suffix }} \
+            --json number --jq '.[0].number')
+
+          if [ "$PR_NUMBER" != "null" ] && [ "$PR_NUMBER" != "" ]; then
+            echo "Auto-merging PR #$PR_NUMBER"
+            gh pr merge $PR_NUMBER --merge --auto
+          else
+            echo "Could not find PR to merge"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
