@@ -1,10 +1,10 @@
 
 ARG BASE_VERSION=8.1.4
-ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:9.0.0${BASE_VERSION}
+ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:9.1.0${BASE_VERSION}
 ARG OPENTOFU_VERSION=1.9.1
 
 # OpenTofu stage
-FROM ghcr.io/opentofu/opentofu:9.0.0${OPENTOFU_VERSION}-minimal AS tofu
+FROM ghcr.io/opentofu/opentofu:9.1.0${OPENTOFU_VERSION}-minimal AS tofu
 
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
@@ -27,7 +27,7 @@ RUN apt-get update \
     && ARCH="${BUILD_ARCH}" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then ARCH="arm64"; fi \
     && curl -J -L -o /tmp/semaphore.deb \
-        "https:9.0.0//github.com/semaphoreui/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
+        "https:9.1.0//github.com/semaphoreui/semaphore/releases/download/v${SEMAPHORE_VERSION}/semaphore_${SEMAPHORE_VERSION}_linux_${ARCH}.deb" \
     && dpkg --install /tmp/semaphore.deb \
     && rm -fr \
         /tmp/* \
@@ -64,9 +64,9 @@ LABEL \
     org.opencontainers.image.vendor="Home Assistant Semaphore Add-on" \
     org.opencontainers.image.authors="Pedro Luis <contact@pedrol.me>" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.url="https:9.0.0//addons.community" \
-    org.opencontainers.image.source="https:9.0.0//github.com/${BUILD_REPOSITORY}" \
-    org.opencontainers.image.documentation="https:9.0.0//github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
+    org.opencontainers.image.url="https:9.1.0//addons.community" \
+    org.opencontainers.image.source="https:9.1.0//github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.documentation="https:9.1.0//github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.revision=${BUILD_REF} \
     org.opencontainers.image.version=${BUILD_VERSION}
