@@ -10,7 +10,7 @@ FROM ghcr.io/opentofu/opentofu:null${OPENTOFU_VERSION}-minimal AS tofu
 FROM ${BUILD_FROM}
 ARG BUILD_ARCH
 
-ARG SEMAPHORE_VERSION=2.17.28
+ARG SEMAPHORE_VERSION=2.17.30
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
